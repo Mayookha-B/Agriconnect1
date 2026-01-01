@@ -21,7 +21,7 @@ const Landing = () => {
 
                 <button 
                     className={`${styles.btn} ${styles.farmerBtn}`} 
-                    onClick={() => navigate("/farmer-page")}
+                    onClick={() => navigate("/farmerlogin")}
                 >
                     Farmer Login
                 </button>
