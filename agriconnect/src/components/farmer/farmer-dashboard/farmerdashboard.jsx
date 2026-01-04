@@ -4,6 +4,8 @@ import {
   MDBCardTitle, MDBCardText, MDBBtn, MDBIcon, MDBTable, MDBTableHead, MDBTableBody 
 } from 'mdb-react-ui-kit';
 
+import WeatherCard from './WeatherCard';
+
 function FarmerDashboard() {
   const myCustomColor = "#48aa0b";
 
@@ -20,6 +22,8 @@ function FarmerDashboard() {
           <MDBIcon fas icon="plus" className="me-2" /> Add New Crop
         </MDBBtn>
       </div>
+
+      
 
       {/* SECTION 1: View Statistics */}
       <MDBRow className="mb-4">
@@ -118,7 +122,16 @@ function FarmerDashboard() {
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
+        {/* SECTION 1: View Statistics */}
+
+
+  
+
+  <MDBCol md="3">
+     <WeatherCard customColor={myCustomColor} /> {/* Your New Weather Module */}
+  </MDBCol>
       </MDBRow>
+      
 
     </MDBContainer>
   );
