@@ -2,7 +2,7 @@ import React from 'react';
 import { MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import loginimg from './loginimg.jpg'; 
 
-function Farmerlog() {
+function Consumerlog() {
   const myCustomColor = "#48aa0b"; // Updated to a cleaner green hex
 
   return (
@@ -66,12 +66,11 @@ function Farmerlog() {
               </div>
 
               <div className='text-center text-md-start mt-4 pt-2'>
-                <a href="/farmer-dashboard" className="text-white text-decoration-none">
                 <MDBBtn className="mb-0 px-5" size='lg' style={{ backgroundColor: myCustomColor, border: 'none' }}>
-                LOGIN
-                </MDBBtn></a>
+                  LOGIN
+                </MDBBtn>
                 <p className="small fw-bold mt-2 pt-1 mb-2">
-                  Don't have an account? <a href="/farmer-register" className="link-danger">Register</a>
+                  Don't have an account? <a href="/consumerregister" className="link-danger">Register</a>
                 </p>
               </div>
             </div>
@@ -107,4 +106,4 @@ function Farmerlog() {
   );
 }
 
-export default Farmerlog;
+export default Consumerlog;

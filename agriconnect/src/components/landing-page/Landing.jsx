@@ -29,7 +29,7 @@ const Landing = () => {
 
                 <button 
                     className={`${styles.btn} ${styles.buyerBtn}`} 
-                    onClick={() => navigate("/buyer-login")}
+                    onClick={() => navigate("/consumer-login")}
                 >
                     Buyer Login
                 </button>
