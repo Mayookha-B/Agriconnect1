@@ -8,6 +8,8 @@ import FarmerRegister from "./components/farmer/farmer-register/farmerregister";
 import ConsumerRegister from "./components/consumer/consumer-register/consumerregister";  
 import FarmerDashboard from "./components/farmer/farmer-dashboard/farmerdashboard";
 import ConsumerPage from './components/consumer/consumer-page/ConsumerPage';
+import AdminDashboard from './components/admin/admin-dashboard/AdminDashboard';
+
 const App = () => {
   return (
     <Router>
@@ -21,6 +23,7 @@ const App = () => {
         <Route path="/consumerregister" element={<ConsumerRegister />} />
         <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
         <Route path="/consumer-page" element={<ConsumerPage />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );
