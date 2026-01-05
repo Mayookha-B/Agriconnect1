@@ -1,85 +1,109 @@
-import React from 'react';
-import './ConsumerPage.css';
+import React from "react";
+import "./ConsumerPage.css";
 
 const ConsumerPage = () => {
   return (
     <div className="landing-container">
-      {/* Navbar */}
+
+      {/* NAVBAR */}
       <nav className="navbar">
-        <div className="logo">AGRICONNECT</div>
+        <h2 className="logo">AgriConnect</h2>
+
         <ul className="nav-links">
           <li>Home</li>
           <li>Shop</li>
-          <li>About</li>
-          <li>Contact</li>
+          <li>Complaints</li>
+          <li>Cart (0)</li>
         </ul>
-        <div className="nav-icons">
-          <i className="fas fa-search"></i>
-          <i className="far fa-user"></i>
-          <i className="far fa-heart"></i>
-          <i className="fas fa-shopping-bag"></i>
-        </div>
       </nav>
 
-      {/* Hero Section */}
-      <header className="hero-section">
-        <div className="hero-content">
-          <h1>Get organic vegetables at Your Fingertips</h1>
-          <button className="btn-primary">Shop Now</button>
-        </div>
-      </header>
+     <section
+  className="hero"
+  style={{
+    backgroundImage: `url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6")`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }}
+>
+  <div className="hero-overlay">
+    <p className="hero-subtitle">WELCOME TO AGRICONNECT MARKETPLACE</p>
+    <h1 className="hero-title">
+      Fresh Fruits & Vegetables <br />
+      Delivered to Your Fingertips
+    </h1>
+    <button className="shop-btn">Shop Now</button>
+  </div>
+</section>
 
-      {/* Features Bar 
-      <section className="features-bar">
-        <div className="feature-item"><span>🔒</span> Secure Payment</div>
-        <div className="feature-item"><span>🚚</span> Free Shipping</div>
-        <div className="feature-item"><span>🎧</span> 24/7 Support</div>
-        <div className="feature-item"><span>🌿</span> Quality Plants</div>
+
+      {/* FEATURES */}
+      <section className="features">
+        <div>
+          <h3>Secure Payments</h3>
+          <p>Safe transactions guaranteed</p>
+        </div>
+
+        <div>
+          <h3>Free Delivery</h3>
+          <p>Orders above ₹499</p>
+        </div>
+
+        <div>
+          <h3>Farm Fresh</h3>
+          <p>Direct from farmers</p>
+        </div>
+
+        <div>
+          <h3>24×7 Support</h3>
+          <p>We are here for you</p>
+        </div>
       </section>
-      */}
 
-      {/* Trending Products */}
-      <section className="product-section">
-        <h2>Trending Products</h2>
-        <div className="product-grid">
-          {[1, 2, 3].map((item) => (
-            <div key={item} className="product-card">
-              <div className="product-img-placeholder">Plant {item}</div>
-              <h3>Snake Plant</h3>
-              <p>$25.00</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* CATEGORIES */}
+      <section className="category-section">
+        <h2>Our Categories</h2>
 
-      {/* Flash Sale Banner */}
-      <section className="sale-banner">
-        <div className="sale-content">
-          <h2>Flash Sale: Up to 50% Off</h2>
-          <p>On Select Items!</p>
-          <button className="btn-secondary">Shop Now</button>
-        </div>
-      </section>
+        <div className="categories">
 
-      {/* About Section */}
-      <section className="about-section">
-        <div className="about-image">
-           <div className="img-placeholder">Plants Group</div>
-        </div>
-        <div className="about-text">
-          <h2>Your Premier Destination for All Green.</h2>
-          <p>We provide a wide variety of indoor and outdoor plants to brighten your space.</p>
-          <div className="stats">
-            <div><strong>20%</strong> Off first order</div>
-            <div><strong>100K</strong> Happy customers</div>
+          <div>
+            <img src="https://images.unsplash.com/photo-1576402187878-974f70c890a5" />
+            <p>Fresh Fruits</p>
           </div>
+
+          <div>
+            <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443" />
+            <p>Organic Vegetables</p>
+          </div>
+
         </div>
       </section>
 
-      {/* Footer */}
+      <section
+  className="cta-section"
+  style={{
+    backgroundImage:
+      "url('https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38')",
+  }}
+>
+  <div className="cta-overlay">
+    <h2>Ready to Find Your Perfect Produce?</h2>
+
+    <p>
+      Browse fresh fruits and vegetables from trusted farmers,
+      delivered directly to your doorstep.
+    </p>
+
+    <button className="shop-btn">Shop Now</button>
+  </div>
+</section>
+
+
+      {/* FOOTER */}
       <footer className="footer">
-        <div className="footer-logo">AGRICONNECT</div>
-        <p>© 2026 AgriConnect. All Rights Reserved.</p>
+        <h2>AgriConnect</h2>
+        <p>Connecting Farmers and Consumers</p>
+        <p>© 2026 AgriConnect</p>
       </footer>
     </div>
   );
