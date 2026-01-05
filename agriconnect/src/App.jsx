@@ -9,7 +9,7 @@ import ConsumerRegister from "./components/consumer/consumer-register/consumerre
 import FarmerDashboard from "./components/farmer/farmer-dashboard/farmerdashboard";
 import ConsumerPage from './components/consumer/consumer-page/ConsumerPage';
 import AdminDashboard from './components/admin/admin-dashboard/AdminDashboard';
-
+import AddCrop from './components/farmer/add-crop/AddCrop';
 const App = () => {
   return (
     <Router>
@@ -24,6 +24,7 @@ const App = () => {
         <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
         <Route path="/consumer-page" element={<ConsumerPage />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/add-crop" element={<AddCrop />} />
       </Routes>
     </Router>
   );

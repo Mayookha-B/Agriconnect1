@@ -1,4 +1,6 @@
 import React from 'react';
+// 1. Added useNavigate import
+import { useNavigate } from 'react-router-dom'; 
 import { 
   MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, 
   MDBIcon, MDBNavbar, MDBInputGroup, MDBBtn, MDBTable, MDBTableHead, MDBTableBody 
@@ -19,6 +21,9 @@ ChartJS.register(
 );
 
 function FarmerDashboard() {
+  // 2. Moved navigate declaration inside the component
+  const navigate = useNavigate(); 
+
   // Theme Colors
   const agrilight = "#37c90bff";
   const agriDark = "#153b0fff"; 
@@ -101,14 +106,13 @@ function FarmerDashboard() {
           <div className="text-white d-flex align-items-center" style={{ fontSize: '0.8rem' }}>
             <span className="px-3" style={{ cursor: 'pointer' }}>Notifications</span>
             <span className="px-3" style={{ cursor: 'pointer' }}>Help</span>
-            
           </div>
         </MDBContainer>
       </MDBNavbar>
 
       {/* --- 2. SUB-MENU BAR --- */}
       <div className="bg-white border-bottom mb-4 px-4 py-2 d-flex gap-4 small fw-bold text-muted shadow-sm">
-        {['Catalog', 'Inventory', 'Orders', 'Advertising', 'Growth'].map((item, i) => (
+        {['Inventory', 'Orders', 'Growth'].map((item, i) => (
           <span key={i} style={{ cursor: 'pointer', color: i === 1 ? agrilight : 'inherit' }}>{item}</span>
         ))}
       </div>
@@ -137,7 +141,12 @@ function FarmerDashboard() {
             </div>
           </MDBCol>
           <MDBCol md="2" className="text-end">
-             <MDBBtn className="w-100 py-3 shadow-0" style={{ backgroundColor: agrilight, border: 'none', fontWeight: 'bold' }}>
+             {/* 3. Button now correctly triggers navigation */}
+             <MDBBtn 
+                onClick={() => navigate('/add-crop')} 
+                className="w-100 py-3 shadow-0" 
+                style={{ backgroundColor: agrilight, border: 'none', fontWeight: 'bold' }}
+              >
                <MDBIcon fas icon="plus" className="me-2" /> Add Crop
              </MDBBtn>
           </MDBCol>
@@ -163,9 +172,8 @@ function FarmerDashboard() {
           </MDBCol>
         </MDBRow>
 
-        {/* --- 5. BOTTOM GRID: Inventory, Payments & Quick Links --- */}
+        {/* --- 5. BOTTOM GRID: Inventory and Payments --- */}
         <MDBRow className="g-4">
-          {/* Inventory Table */}
           <MDBCol md="8">
             <ActionCard title="Inventory Management" footerAction="Manage Inventory">
               <MDBTable hover responsive small className="mt-2 mb-0">
@@ -198,7 +206,6 @@ function FarmerDashboard() {
             </ActionCard>
           </MDBCol>
 
-          {/* Recent Payments Section */}
           <MDBCol md="4">
             <ActionCard title="Recent Payments" footerAction="View All DeFi TX" insightTitle="Payment Status" insightContent="2 Pending Confirmation">
               <div className="mb-3 p-2 border-bottom">
@@ -224,7 +231,7 @@ function FarmerDashboard() {
             </ActionCard>
           </MDBCol>
 
-          {/* Additional Quick Action Rows */}
+          {/* Quick Actions */}
           <MDBCol md="3">
             <ActionCard title="Match Market Price" footerAction="Update Price" insightTitle="Price Alert" insightContent="Current Avg: 0.003 ETH">
               <div className="text-center py-2">
