@@ -12,6 +12,19 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* Reset default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
 
 a {
   font-weight: 500;

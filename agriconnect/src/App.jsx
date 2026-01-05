@@ -7,7 +7,7 @@ import Adminlog from "./components/admin/admin-login/adminlogin";
 import FarmerRegister from "./components/farmer/farmer-register/farmerregister";
 import ConsumerRegister from "./components/consumer/consumer-register/consumerregister";  
 import FarmerDashboard from "./components/farmer/farmer-dashboard/farmerdashboard";
-
+import ConsumerPage from './components/consumer/consumer-page/ConsumerPage';
 const App = () => {
   return (
     <Router>
@@ -20,6 +20,7 @@ const App = () => {
         <Route path="/farmer-register" element={<FarmerRegister />} />
         <Route path="/consumerregister" element={<ConsumerRegister />} />
         <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
+        <Route path="/consumer-page" element={<ConsumerPage />} />
       </Routes>
     </Router>
   );
