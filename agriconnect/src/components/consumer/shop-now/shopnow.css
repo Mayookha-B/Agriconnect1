@@ -1,0 +1,77 @@
+.shop-hero {
+  height: 55vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.shop-title {
+  font-size: 70px;
+  color: white;
+  font-weight: 700;
+}
+
+.shop-topbar {
+  margin: 30px 60px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+  padding: 0 60px 40px 60px;
+}
+
+.product-card {
+  text-align: left;
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.product-card h3 {
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.product-card span {
+  font-weight: bold;
+}
+
+.cta-banner {
+  margin-top: 40px;
+  height: 55vh;
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cta-banner button {
+  background: #7ac142;
+  padding: 12px 30px;
+  border-radius: 30px;
+  border: none;
+  font-size: 18px;
+}
+
+footer {
+  text-align: center;
+  padding: 30px 0;
+  background: #eefcd9;
+}
+
+footer p {
+  font-weight: 600;
+}
+
+

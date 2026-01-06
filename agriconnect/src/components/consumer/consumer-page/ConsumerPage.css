@@ -13,7 +13,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  background: white;
+  background: rgb(255, 255, 255);
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   z-index: 10;
 }
@@ -35,13 +35,13 @@
   cursor: pointer;
 }
 
+
 /* HERO SECTION */
 .hero {
   height: 95vh;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url("https://images.unsplash.com/photo-1542838132-92c53300491e");
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -50,7 +50,6 @@
   padding-top: 80px;
   position: relative;
 }
-
 
 /* Dark overlay on image */
 .hero::before {
@@ -85,7 +84,6 @@
   border-radius: 30px;
   cursor: pointer;
 }
-
 /* FEATURES SECTION */
 .features {
   display: grid;

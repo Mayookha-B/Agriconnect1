@@ -1,5 +1,6 @@
 import React from "react";
 import "./ConsumerPage.css";
+import { Link } from "react-router-dom";
 
 const ConsumerPage = () => {
   return (
@@ -10,17 +11,22 @@ const ConsumerPage = () => {
         <h2 className="logo">AgriConnect</h2>
 
         <ul className="nav-links">
-          <li>Home</li>
-          <li>Shop</li>
-          <li>Complaints</li>
-          <li>Cart (0)</li>
-        </ul>
+  <li>Home</li>
+
+  <li>
+    <Link to="/shop">Shop</Link>
+  </li>
+
+  <li>Complaints</li>
+  <li>Cart</li>
+</ul>
+
       </nav>
 
      <section
   className="hero"
   style={{
-    backgroundImage: `url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6")`,
+    backgroundImage: `url("https://images.pexels.com/photos/551997/pexels-photo-551997.jpeg?auto=compress&cs=tinysrgb&w=1600")`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -32,7 +38,9 @@ const ConsumerPage = () => {
       Fresh Fruits & Vegetables <br />
       Delivered to Your Fingertips
     </h1>
-    <button className="shop-btn">Shop Now</button>
+    <Link to="/shop">
+  <button className="shop-btn">Shop Now</button>
+</Link>
   </div>
 </section>
 
@@ -46,7 +54,7 @@ const ConsumerPage = () => {
 
         <div>
           <h3>Free Delivery</h3>
-          <p>Orders above ₹499</p>
+          <p>Orders above ₹199</p>
         </div>
 
         <div>
@@ -67,12 +75,12 @@ const ConsumerPage = () => {
         <div className="categories">
 
           <div>
-            <img src="https://images.unsplash.com/photo-1576402187878-974f70c890a5" />
+            <img src="https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=1200" />
             <p>Fresh Fruits</p>
           </div>
 
           <div>
-            <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443" />
+            <img src="https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg?auto=compress&cs=tinysrgb&w=1200" />
             <p>Organic Vegetables</p>
           </div>
 
@@ -94,7 +102,10 @@ const ConsumerPage = () => {
       delivered directly to your doorstep.
     </p>
 
-    <button className="shop-btn">Shop Now</button>
+    <Link to="/shop">
+  <button className="shop-btn">Shop Now</button>
+</Link>
+
   </div>
 </section>
 
