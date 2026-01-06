@@ -1,179 +1,140 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { 
-  MDBCard, 
-  MDBCardBody, 
-  MDBCardTitle, 
-  MDBIcon, 
-  MDBTypography,
-  MDBSpinner
+  MDBCard, MDBCardBody, MDBCardTitle, MDBIcon, 
+  MDBTypography, MDBSpinner, MDBRow, MDBCol, MDBBadge
 } from 'mdb-react-ui-kit';
 
 const WeatherCard = ({ customColor }) => {
   const [weather, setWeather] = useState(null);
+  const [forecast, setForecast] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Configuration
   const API_KEY = '6bb9e303bfa7bb04949c5c531b5fbe0b'; 
   const DEFAULT_CITY = 'Thiruvananthapuram'; 
 
-  /**
-   * Logic to fetch weather data based on coordinates or city name
-   */
-  const fetchWeather = useCallback(async (lat, lon, city) => {
+  const fetchWeatherData = useCallback(async (lat, lon, city) => {
     setLoading(true);
     setError(null);
     
-    let url = `https://api.openweathermap.org/data/2.5/weather?units=metric&appid=${API_KEY}`;
+    let currentUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&appid=${API_KEY}`;
+    let forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?units=metric&appid=${API_KEY}`;
+
     if (lat && lon) {
-      url += `&lat=${lat}&lon=${lon}`;
+      currentUrl += `&lat=${lat}&lon=${lon}`;
+      forecastUrl += `&lat=${lat}&lon=${lon}`;
     } else {
-      url += `&q=${city}`;
+      currentUrl += `&q=${city}`;
+      forecastUrl += `&q=${city}`;
     }
 
     try {
-      const response = await axios.get(url);
-      setWeather(response.data);
+      const [currentRes, forecastRes] = await Promise.all([
+        axios.get(currentUrl),
+        axios.get(forecastUrl)
+      ]);
+
+      setWeather(currentRes.data);
+      setForecast(forecastRes.data.list.slice(0, 8)); // Next 24 hours
       setLoading(false);
     } catch (err) {
-      console.error("Weather fetch error:", err);
-      setError("Weather service temporarily unavailable.");
+      setError("Weather sync failed.");
       setLoading(false);
     }
   }, [API_KEY]);
 
-  /**
-   * On component mount, attempt to get browser location
-   */
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          fetchWeather(position.coords.latitude, position.coords.longitude);
-        },
-        () => {
-          // Fallback if user denies location access
-          fetchWeather(null, null, DEFAULT_CITY);
-        }
+        (pos) => fetchWeatherData(pos.coords.latitude, pos.coords.longitude),
+        () => fetchWeatherData(null, null, DEFAULT_CITY)
       );
     } else {
-      fetchWeather(null, null, DEFAULT_CITY);
+      fetchWeatherData(null, null, DEFAULT_CITY);
     }
-  }, [fetchWeather]);
+  }, [fetchWeatherData]);
 
-  /**
-   * Helper: Map weather description to FontAwesome icons
-   */
   const getWeatherIcon = (description) => {
     const desc = description.toLowerCase();
     if (desc.includes('cloud')) return 'cloud';
-    if (desc.includes('rain') || desc.includes('drizzle')) return 'cloud-showers-heavy';
-    if (desc.includes('clear') || desc.includes('sun')) return 'sun';
-    if (desc.includes('mist') || desc.includes('fog')) return 'smog';
-    if (desc.includes('thunder')) return 'bolt';
-    if (desc.includes('snow')) return 'snowflake';
-    return 'cloud-sun'; // Default
+    if (desc.includes('rain')) return 'cloud-showers-heavy';
+    if (desc.includes('clear')) return 'sun';
+    return 'cloud-sun';
   };
 
-  /**
-   * Helper: Agri-Insight for Soil Temperature Estimation
-   */
-  const estimateSoilTemp = (airTemp, description) => {
-    const isSunny = description.toLowerCase().includes('clear') || description.toLowerCase().includes('sun');
-    const solarFactor = isSunny ? 1.1 : 0.85; 
-    const estimated = (airTemp * 0.9) * solarFactor;
-    return Math.round(estimated);
-  };
+  // Logic to check if rain is expected in the next 24 hours
+  const isRainIncoming = forecast.some(item => item.pop > 0.5);
 
-  // Loading State
-  if (loading) {
-    return (
-      <MDBCard className="text-center h-100 shadow-sm d-flex align-items-center justify-content-center py-5">
-        <MDBSpinner color='success'>
-          <span className='visually-hidden'>Loading...</span>
-        </MDBSpinner>
-        <p className="mt-2 text-muted">Syncing farm weather...</p>
-      </MDBCard>
-    );
-  }
-
-  // Error State
-  if (error || !weather) {
-    return (
-      <MDBCard className="text-center h-100 shadow-sm p-4 border-danger">
-        <MDBIcon fas icon="exclamation-triangle" size="2x" className="text-danger mb-2" />
-        <p className="small text-muted">{error || "Data unavailable"}</p>
-        <button className="btn btn-sm btn-outline-success" onClick={() => window.location.reload()}>Retry</button>
-      </MDBCard>
-    );
-  }
-
-  const soilTemp = estimateSoilTemp(weather.main.temp, weather.weather[0].description);
+  if (loading) return (
+    <MDBCard className="text-center h-100 shadow-sm d-flex align-items-center justify-content-center py-5">
+      <MDBSpinner color='success' />
+    </MDBCard>
+  );
 
   return (
-    <MDBCard className="text-center h-100 shadow-sm" style={{ borderTop: `5px solid ${customColor}`, borderRadius: '15px' }}>
-      <MDBCardBody>
-        {/* Top Section: Icon and City */}
-        <div className="d-flex justify-content-between align-items-center mb-2">
-          <MDBIcon 
-            fas 
-            icon={getWeatherIcon(weather.weather[0].description)} 
-            size="3x" 
-            style={{ color: customColor }} 
-          />
+    <MDBCard className="h-100 shadow-sm" style={{ borderTop: `5px solid ${customColor}`, borderRadius: '15px' }}>
+      <MDBCardBody className="p-3">
+        {/* Current Status Header */}
+        <div className="d-flex justify-content-between align-items-center mb-1">
+          <MDBIcon fas icon={getWeatherIcon(weather.weather[0].description)} size="2x" style={{ color: customColor }} />
           <div className="text-end">
-            <MDBCardTitle className="mb-0 fw-bold">{weather.name}</MDBCardTitle>
-            <small className="text-muted"><MDBIcon fas icon="map-marker-alt" className="me-1"/>Current Location</small>
+            <h6 className="mb-0 fw-bold">{weather.name}</h6>
+            <small className="text-muted" style={{fontSize: '0.65rem'}}>Live Farm Feed</small>
           </div>
         </div>
 
-        {/* Temperature Display */}
-        <h1 className="fw-bold mb-0" style={{ fontSize: '3rem' }}>{Math.round(weather.main.temp)}°C</h1>
-        <MDBTypography tag='div' className='text-capitalize mb-3 fw-bold' style={{ color: customColor }}>
-          {weather.weather[0].description}
-        </MDBTypography>
+        <div className="text-center mb-3">
+          <h2 className="fw-bold mb-0">{Math.round(weather.main.temp)}°C</h2>
+          <small className="text-capitalize fw-bold" style={{ color: customColor }}>{weather.weather[0].description}</small>
+        </div>
 
-        {/* Row 1: Standard Weather Details */}
-        <div className="d-flex justify-content-around border-top pt-3 mt-2">
-          <div className="text-center">
-            <small className="text-muted d-block small">Humidity</small>
-            <span className="fw-bold">{weather.main.humidity}%</span>
-          </div>
-          <div className="text-center border-start border-end px-3">
-            <small className="text-muted d-block small">Wind</small>
-            <span className="fw-bold">{weather.wind.speed} m/s</span>
-          </div>
-          <div className="text-center">
-            <small className="text-muted d-block small">Pressure</small>
-            <span className="fw-bold">{weather.main.pressure} hPa</span>
+        {/* --- HR-WISE FORECAST SCROLL --- */}
+        <div className="mt-2">
+          <small className="fw-bold text-uppercase d-block mb-2 text-muted" style={{ letterSpacing: '1px', fontSize: '0.6rem' }}>
+            <MDBIcon far icon="clock" className="me-1" /> 24-Hour Forecast
+          </small>
+          
+          <div className="d-flex overflow-auto pb-2" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+            <style>{`.d-flex::-webkit-scrollbar { display: none; }`}</style>
+            {forecast.map((item, index) => (
+              <div key={index} className="text-center px-3 border-end" style={{ minWidth: '70px' }}>
+                <small className="d-block mb-1 text-muted" style={{ fontSize: '0.7rem' }}>
+                  {new Date(item.dt * 1000).toLocaleTimeString([], { hour: 'numeric', hour12: true })}
+                </small>
+                <MDBIcon fas icon={getWeatherIcon(item.weather[0].description)} className="mb-1" style={{ color: customColor, fontSize: '0.9rem' }} />
+                <div className="fw-bold" style={{ fontSize: '0.85rem' }}>{Math.round(item.main.temp)}°</div>
+                <small className={item.pop > 0.4 ? "text-danger" : "text-info"} style={{ fontSize: '0.65rem' }}>
+                   <MDBIcon fas icon="tint" size="xs" /> {Math.round(item.pop * 100)}%
+                </small>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Row 2: Agricultural Insights */}
-        <div className="mt-4 p-2 rounded-3" style={{ backgroundColor: '#f8f9fa', border: '1px dashed #ced4da' }}>
-          <div className="d-flex align-items-center justify-content-center mb-1">
-            <MDBIcon fas icon="seedling" className="me-2 text-success" />
-            <small className="fw-bold text-uppercase" style={{ letterSpacing: '1px' }}>Agri-Insight</small>
+        {/* --- DYNAMIC AGRI-INSIGHT --- */}
+        <div className={`mt-3 p-2 rounded-3 border border-dashed ${isRainIncoming ? 'bg-warning-light' : 'bg-light'}`}>
+          <div className="d-flex justify-content-between align-items-center">
+            <small className="fw-bold text-success"><MDBIcon fas icon="leaf" /> AGRI-INSIGHT</small>
+            <small className="fw-bold" style={{ color: '#d35400' }}>
+              Soil: {Math.round(weather.main.temp * 0.9)}°C
+            </small>
           </div>
-          <div className="d-flex justify-content-between align-items-center px-2">
-            <span className="small text-muted">Est. Soil Temp:</span>
-            <span className="fw-bold" style={{ color: '#d35400' }}>{soilTemp}°C</span>
-          </div>
-          <div className="mt-1">
-            {soilTemp >= 22 && soilTemp <= 32 ? (
-              <span className="badge badge-success" style={{fontSize: '0.7rem'}}>Ideal for Planting</span>
-            ) : (
-              <span className="badge badge-warning" style={{fontSize: '0.7rem'}}>Check Crop Compatibility</span>
-            )}
-          </div>
+          {isRainIncoming ? (
+            <div className="mt-1 text-danger fw-bold" style={{ fontSize: '0.65rem' }}>
+              <MDBIcon fas icon="exclamation-circle" className="me-1" /> High rain probability. Delay irrigation.
+            </div>
+          ) : (
+            <div className="mt-1 text-muted" style={{ fontSize: '0.65rem' }}>
+              Weather stable for the next 24 hours.
+            </div>
+          )}
         </div>
 
-        {/* Refresh Link */}
-        <div className="text-end mt-3">
+        <div className="text-end mt-2">
           <small 
             className="text-muted cursor-pointer" 
-            style={{ cursor: 'pointer', fontSize: '0.75rem' }} 
+            style={{ fontSize: '0.65rem', cursor: 'pointer' }} 
             onClick={() => window.location.reload()}
           >
             <MDBIcon fas icon="sync-alt" className="me-1" /> Update Now

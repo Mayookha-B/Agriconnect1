@@ -10,6 +10,14 @@ import FarmerDashboard from "./components/farmer/farmer-dashboard/farmerdashboar
 import ConsumerPage from './components/consumer/consumer-page/ConsumerPage';
 import AdminDashboard from './components/admin/admin-dashboard/AdminDashboard';
 import AddCrop from './components/farmer/add-crop/AddCrop';
+import Inventory from './components/farmer/inventory/Inventory';
+import Orders from './components/farmer/orders/Orders';
+import SoldOrders from './components/farmer/orders/SoldOrders';
+import Growth from './components/farmer/growth/Growth';
+import ViewVideo from './components/farmer/university/ViewVideo';
+
+
+
 const App = () => {
   return (
     <Router>
@@ -25,6 +33,12 @@ const App = () => {
         <Route path="/consumer-page" element={<ConsumerPage />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/add-crop" element={<AddCrop />} />
+        <Route path="/inventory" element={<Inventory />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/sold-orders" element={<SoldOrders />} />
+        <Route path="/growth" element={<Growth />} />
+        <Route path="/view-video" element={<ViewVideo />} />
+
       </Routes>
     </Router>
   );
