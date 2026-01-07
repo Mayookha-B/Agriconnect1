@@ -1,0 +1,178 @@
+/* Color Palette from Image */
+:root {
+  --agri-dark: #1a3a0c;
+  --agri-lime: #4ade1e;
+  --agri-bg: #f4f6f3;
+  --border-light: #e0e0e0;
+}
+
+.agri-admin-wrapper {
+  background-color: var(--agri-bg);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header Styling */
+.agri-topbar {
+  background-color: var(--agri-dark);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  color: white;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.logo-accent {
+  color: var(--agri-lime);
+}
+
+.search-container {
+  display: flex;
+  width: 50%;
+  max-width: 600px;
+}
+
+.nav-search {
+  width: 100%;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px 0 0 4px;
+}
+
+.search-btn {
+  background-color: #8da41b; /* Olive green from search btn */
+  border: none;
+  padding: 0 15px;
+  color: white;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.topbar-right {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+}
+
+.border-left {
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  padding-left: 20px;
+}
+
+/* Sub Nav */
+.sub-nav {
+  background: white;
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 20px;
+}
+
+.sub-nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.sub-nav li {
+  padding: 12px 20px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.sub-nav li.active {
+  color: var(--agri-lime);
+  border-bottom: 3px solid var(--agri-lime);
+}
+
+/* Main Content & Table */
+.dashboard-content {
+  padding: 30px;
+}
+
+.page-heading {
+  color: #333;
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.table-card {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  padding: 1px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.agri-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.agri-table th {
+  text-align: left;
+  padding: 15px;
+  background: #fafafa;
+  color: #888;
+  font-size: 12px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.agri-table td {
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  color: #444;
+}
+
+.complaint-desc {
+  font-weight: 500;
+  max-width: 400px;
+}
+
+.user-id {
+  display: block;
+  font-family: monospace;
+  color: var(--agri-dark);
+}
+
+.user-label {
+  font-size: 11px;
+  color: #999;
+}
+
+.remarks-text {
+  color: #777;
+  font-style: italic;
+}
+
+.status-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.status-container.resolved {
+  color: #2e7d32;
+}
+
+.status-container.pending {
+  color: #f57c00;
+}
