@@ -16,7 +16,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Changed path to "/" so it loads immediately at localhost:5174 */}
+       
         <Route path="/" element={<Landing />} />
         <Route path="/farmerlogin" element={<Farmerlog />} />
         <Route path="/consumer-login" element={<Consumerlog />} />

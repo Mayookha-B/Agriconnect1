@@ -1,9 +1,9 @@
 import React from 'react';
-// 1. Added useNavigate import
 import { useNavigate } from 'react-router-dom'; 
 import { 
   MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, 
-  MDBIcon, MDBNavbar, MDBInputGroup, MDBBtn, MDBTable, MDBTableHead, MDBTableBody 
+  MDBIcon, MDBNavbar, MDBInputGroup, MDBBtn, MDBTable, MDBTableHead, MDBTableBody,
+  MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBDropdownItem 
 } from 'mdb-react-ui-kit';
 
 // Charting Components
@@ -21,7 +21,6 @@ ChartJS.register(
 );
 
 function FarmerDashboard() {
-  // 2. Moved navigate declaration inside the component
   const navigate = useNavigate(); 
 
   // Theme Colors
@@ -54,12 +53,12 @@ function FarmerDashboard() {
   };
 
   // Reusable Component: ActionCard
-  const ActionCard = ({ title, children, footerAction, insightTitle, insightContent }) => (
+  const ActionCard = ({ title, children, footerAction, footerClick, insightTitle, insightContent, menu }) => (
     <MDBCard className="h-100 shadow-sm border-1" style={{ borderRadius: '15px', borderTop: `5px solid ${agrilight}` }}>
       <MDBCardBody className="p-3 d-flex flex-column">
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h6 className="fw-bold mb-0 text-muted" style={{ fontSize: '0.9rem' }}>{title}</h6>
-          <MDBIcon fas icon="ellipsis-h" className="text-muted small" />
+          {menu ? menu : <MDBIcon fas icon="ellipsis-h" className="text-muted small" />}
         </div>
         <div className="flex-grow-1 mb-3">{children}</div>
         {insightTitle && (
@@ -72,7 +71,7 @@ function FarmerDashboard() {
           </div>
         )}
         <div className="text-end mt-auto pt-2">
-          <a href="#!" className="text-decoration-none small fw-bold text-muted" style={{ fontSize: '0.75rem' }}>
+          <a href="#!" onClick={footerClick} className="text-decoration-none small fw-bold text-muted" style={{ fontSize: '0.75rem' }}>
             <MDBIcon fas icon="sync-alt" className="me-1" size="xs" /> {footerAction || 'Update Now'}
           </a>
         </div>
@@ -88,7 +87,7 @@ function FarmerDashboard() {
         <MDBContainer fluid>
           <div className="d-flex align-items-center">
             <MDBIcon fas icon="bars" className="text-white me-3" style={{ cursor: 'pointer' }} />
-            <div className="d-flex align-items-center" style={{ cursor: 'pointer' }}>
+            <div className="d-flex align-items-center" style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
               <img src="/logo.png" alt="AgriConnect" height="45" className="me-2" style={{ objectFit: 'contain' }} />
               <span className="text-white fw-bold" style={{ fontSize: '1.2rem', letterSpacing: '-0.5px' }}>
                 agri<span style={{ color: '#b9f319ff' }}>connect</span>
@@ -111,10 +110,20 @@ function FarmerDashboard() {
       </MDBNavbar>
 
       {/* --- 2. SUB-MENU BAR --- */}
-      <div className="bg-white border-bottom mb-4 px-4 py-2 d-flex gap-4 small fw-bold text-muted shadow-sm">
-        {['Inventory', 'Orders', 'Growth'].map((item, i) => (
-          <span key={i} style={{ cursor: 'pointer', color: i === 1 ? agrilight : 'inherit' }}>{item}</span>
-        ))}
+      <div className="bg-white border-bottom mb-4 px-4 py-2 d-flex gap-4 small fw-bold text-muted shadow-sm align-items-center">
+        <span onClick={() => navigate('/inventory')} style={{ cursor: 'pointer', color: agrilight }}>Inventory</span>
+        
+        <MDBDropdown group>
+          <MDBDropdownToggle tag='span' style={{ cursor: 'pointer' }} className="fw-bold">
+            Orders <MDBIcon fas icon="caret-down" className="ms-1" />
+          </MDBDropdownToggle>
+          <MDBDropdownMenu>
+            <MDBDropdownItem link onClick={() => navigate('/orders')}>View New Orders</MDBDropdownItem>
+            <MDBDropdownItem link onClick={() => navigate('/sold-orders')}>View Sold Orders</MDBDropdownItem>
+          </MDBDropdownMenu>
+        </MDBDropdown>
+
+        <span onClick={() => navigate('/growth')} style={{ cursor: 'pointer' }}>Growth</span>
       </div>
 
       <MDBContainer fluid className="px-4 pb-5">
@@ -141,7 +150,6 @@ function FarmerDashboard() {
             </div>
           </MDBCol>
           <MDBCol md="2" className="text-end">
-             {/* 3. Button now correctly triggers navigation */}
              <MDBBtn 
                 onClick={() => navigate('/add-crop')} 
                 className="w-100 py-3 shadow-0" 
@@ -152,10 +160,10 @@ function FarmerDashboard() {
           </MDBCol>
         </MDBRow>
 
-        {/* --- 4. MIDDLE GRID: Analytics & Weather --- */}
+        {/* --- 4. MAIN DASHBOARD GRID --- */}
         <MDBRow className="g-4 mb-4">
           <MDBCol md="8">
-            <ActionCard title="Weekly Sold Analytics" footerAction="View Full Report" insightTitle="Market Trend" insightContent="Demand for Grains is up 15%">
+            <ActionCard title="Weekly Sold Analytics" footerAction="View Growth" footerClick={() => navigate('/growth')} insightTitle="Market Trend" insightContent="Demand for Grains is up 15%">
               <div className="d-flex justify-content-between align-items-end mb-2">
                  <h4 className="fw-bold mb-0">151 Units</h4>
                  <small className="text-success fw-bold">+12% from last week</small>
@@ -172,10 +180,25 @@ function FarmerDashboard() {
           </MDBCol>
         </MDBRow>
 
-        {/* --- 5. BOTTOM GRID: Inventory and Payments --- */}
         <MDBRow className="g-4">
+          {/* Inventory Card */}
           <MDBCol md="8">
-            <ActionCard title="Inventory Management" footerAction="Manage Inventory">
+            <ActionCard 
+              title="Inventory Management" 
+              footerAction="Manage Inventory"
+              footerClick={() => navigate('/inventory')}
+              menu={
+                <MDBDropdown>
+                  <MDBDropdownToggle tag="a" className="text-muted shadow-0 p-0">
+                    <MDBIcon fas icon="ellipsis-h" />
+                  </MDBDropdownToggle>
+                  <MDBDropdownMenu>
+                    <MDBDropdownItem link onClick={() => navigate('/inventory')}>View Inventory</MDBDropdownItem>
+                    <MDBDropdownItem link onClick={() => navigate('/add-crop')}>Add New Crop</MDBDropdownItem>
+                  </MDBDropdownMenu>
+                </MDBDropdown>
+              }
+            >
               <MDBTable hover responsive small className="mt-2 mb-0">
                 <MDBTableHead style={{ backgroundColor: '#f8f9fa' }}>
                   <tr className="small text-muted text-uppercase">
@@ -193,13 +216,6 @@ function FarmerDashboard() {
                     <td>50 kg</td>
                     <td>0.002 ETH</td>
                     <td><span className="badge" style={{backgroundColor: 'rgba(55,201,11,0.2)', color: agrilight}}>In Stock</span></td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Golden Wheat</td>
-                    <td>Grains</td>
-                    <td>200 kg</td>
-                    <td>0.005 ETH</td>
-                    <td><span className="badge" style={{backgroundColor: 'rgba(255,193,7,0.2)', color: '#ffc107'}}>Low Stock</span></td>
                   </tr>
                 </MDBTableBody>
               </MDBTable>
@@ -231,34 +247,31 @@ function FarmerDashboard() {
             </ActionCard>
           </MDBCol>
 
-          {/* Quick Actions */}
-          <MDBCol md="3">
-            <ActionCard title="Match Market Price" footerAction="Update Price" insightTitle="Price Alert" insightContent="Current Avg: 0.003 ETH">
-              <div className="text-center py-2">
-                <span className="text-muted small">Your Price:</span>
-                <h3 className="fw-bold text-danger mt-1">0.005 ETH</h3>
+          {/* Farmer University Activated */}
+          <MDBCol md="4">
+            <ActionCard 
+              title="Tutorials & Resources" 
+              footerAction="Resume Lesson"
+              footerClick={() => navigate('/view-video')}
+            >
+              <div className="position-relative mb-2">
+                <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=400" className="w-100 rounded border" style={{height: '100px', objectFit: 'cover'}} alt="edu"/>
+                <div 
+                  className="position-absolute top-50 start-50 translate-middle"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => navigate('/view-video')}
+                >
+                  <MDBIcon fas icon="play-circle" size="3x" className="text-white opacity-75" />
+                </div>
               </div>
-            </ActionCard>
-          </MDBCol>
-          <MDBCol md="3">
-            <ActionCard title="Farmer University" footerAction="Resume Lesson">
-              <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=400" className="w-100 rounded mb-2 border" style={{height: '75px', objectFit: 'cover'}} alt="edu"/>
-              <p className="small text-muted mb-0">Blockchain Logistics 101</p>
-            </ActionCard>
-          </MDBCol>
-          <MDBCol md="3">
-            <ActionCard title="Claims & Disputes" footerAction="Manage Claims" insightTitle="Critical" insightContent={<span className="text-danger">Action Required</span>}>
-                <div className="text-center py-3 d-flex flex-column justify-content-center h-100">
-                   <h1 className="fw-bold mb-0">1</h1>
-                </div>
-            </ActionCard>
-          </MDBCol>
-          <MDBCol md="3">
-            <ActionCard title="Global Markets" footerAction="Manage Listings">
-                <div className="text-center py-2 h-100 d-flex flex-column justify-content-center align-items-center">
-                    <MDBIcon fas icon="globe-asia" size="3x" className="mb-2" style={{ color: '#eee' }} />
-                    <p className="small text-muted">Active in 4 Regions</p>
-                </div>
+              
+              <MDBBtn 
+                className="w-100 shadow-0" 
+                style={{ backgroundColor: agrilight }}
+                onClick={() => navigate('/view-video')}
+              >
+                Watch Video
+              </MDBBtn>
             </ActionCard>
           </MDBCol>
         </MDBRow>
