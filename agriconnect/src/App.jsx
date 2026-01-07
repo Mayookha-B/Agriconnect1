@@ -8,21 +8,15 @@ import FarmerRegister from "./components/farmer/farmer-register/farmerregister";
 import ConsumerRegister from "./components/consumer/consumer-register/consumerregister";  
 import FarmerDashboard from "./components/farmer/farmer-dashboard/farmerdashboard";
 import ConsumerPage from './components/consumer/consumer-page/ConsumerPage';
+import ShopPage from './components/consumer/shop-now/shopnow';
 import AdminDashboard from './components/admin/admin-dashboard/AdminDashboard';
 import AddCrop from './components/farmer/add-crop/AddCrop';
-import Inventory from './components/farmer/inventory/Inventory';
-import Orders from './components/farmer/orders/Orders';
-import SoldOrders from './components/farmer/orders/SoldOrders';
-import Growth from './components/farmer/growth/Growth';
-import ViewVideo from './components/farmer/university/ViewVideo';
-
-
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Changed path to "/" so it loads immediately at localhost:5174 */}
+       
         <Route path="/" element={<Landing />} />
         <Route path="/farmerlogin" element={<Farmerlog />} />
         <Route path="/consumer-login" element={<Consumerlog />} />
@@ -31,14 +25,9 @@ const App = () => {
         <Route path="/consumerregister" element={<ConsumerRegister />} />
         <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
         <Route path="/consumer-page" element={<ConsumerPage />} />
+        <Route path="/shop" element={<ShopPage />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/add-crop" element={<AddCrop />} />
-        <Route path="/inventory" element={<Inventory />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/sold-orders" element={<SoldOrders />} />
-        <Route path="/growth" element={<Growth />} />
-        <Route path="/view-video" element={<ViewVideo />} />
-
       </Routes>
     </Router>
   );
