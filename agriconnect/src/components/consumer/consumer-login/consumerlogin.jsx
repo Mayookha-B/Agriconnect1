@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import navigate hook
 import { MDBCol, MDBRow, MDBBtn, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import loginimg from './loginimg.jpg';
 
 function Consumerlog() {
-  const navigate = useNavigate(); // Initialize navigation
+  
   const myCustomColor = "#48aa0b";
 
-  // State to hold input values
-  const [credentials, setCredentials] = useState({
-    email: '',
-    password: ''
-  });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setCredentials({ ...credentials, [e.target.type === 'email' ? 'email' : 'password']: e.target.value });
-  };
-
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Basic logic: if fields aren't empty, navigate to consumer page
-    if (credentials.email && credentials.password) {
-      navigate('/consumer-page');
-    } else {
-      alert("Please enter both email and password");
+    try {
+      const res = await axios.post('http://localhost:5000/api/consumer/login', { email, password });
+      
+      // Store credentials
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('role', 'consumer');
+      
+      alert(res.data.message);
+      navigate('/consumer-page'); 
+    } catch (err) {
+      alert(err.response?.data?.message || "Login Failed");
     }
   };
 
@@ -64,8 +65,9 @@ function Consumerlog() {
                   id='emailInput' 
                   type='email' 
                   size="lg"
-                  value={credentials.email}
-                  onChange={handleChange}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} // Changed from handleChange
+  required
                 />
                 <MDBInput 
                   wrapperClass='mb-4' 
@@ -73,8 +75,9 @@ function Consumerlog() {
                   id='passInput' 
                   type='password' 
                   size="lg"
-                  value={credentials.password}
-                  onChange={handleChange}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)} // Changed from handleChange
+  required
                 />
 
                 <div className="d-flex justify-content-between mb-4">
