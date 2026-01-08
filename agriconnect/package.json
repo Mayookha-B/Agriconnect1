@@ -13,6 +13,7 @@
     "@fortawesome/fontawesome-free": "^7.1.0",
     "axios": "^1.13.2",
     "chart.js": "^4.5.1",
+    "ethers": "^6.16.0",
     "font-awesome": "^4.7.0",
     "lucide-react": "^0.562.0",
     "mdb-react-ui-kit": "^10.0.0",
