@@ -16,7 +16,8 @@ import Orders from './components/farmer/orders/Orders';
 import SoldOrders from './components/farmer/orders/SoldOrders';
 import Growth from './components/farmer/growth/Growth';
 import ViewVideo from './components/farmer/university/ViewVideo';
-import HelpPage from './components/farmer/help/HelpPage';
+import HelpPage from "./components/farmer/help/HelpPage";
+
 
 const App = () => {
   return (
@@ -40,6 +41,8 @@ const App = () => {
         <Route path="/growth" element={<Growth />} />
         <Route path="/view-video" element={<ViewVideo />} />
         <Route path="/help" element={<HelpPage />} />
+      
+        
       </Routes>
     </Router>
   );
