@@ -1,8 +1,22 @@
-import React from "react";
+import React,{useEffect} from "react";
+import { useNavigate } from 'react-router-dom';
 import "./ConsumerPage.css";
 import { Link } from "react-router-dom";
 
 const ConsumerPage = () => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
+  
+  // Notice we check for 'consumer' role specifically
+  if (!token || role !== 'consumer') {
+    navigate('/consumer-login');
+  }
+}, [navigate]);
+
   return (
     <div className="landing-container">
 

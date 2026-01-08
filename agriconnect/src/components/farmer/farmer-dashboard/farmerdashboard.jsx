@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { 
   MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, 
@@ -15,6 +15,9 @@ import { Line } from 'react-chartjs-2';
 
 import WeatherCard from './WeatherCard'; 
 
+
+
+
 // Registering ChartJS
 ChartJS.register(
   CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend
@@ -22,6 +25,15 @@ ChartJS.register(
 
 function FarmerDashboard() {
   const navigate = useNavigate(); 
+
+  useEffect(() => {
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
+  if (!token || role !== 'farmer') {
+    navigate('/farmerlogin');
+  }
+}, [navigate]);
+
 
   // Theme Colors
   const agrilight = "#37c90bff";
