@@ -115,9 +115,14 @@ function FarmerDashboard() {
             </MDBInputGroup>
           </div>
           <div className="text-white d-flex align-items-center" style={{ fontSize: '0.8rem' }}>
-            <span className="px-3" style={{ cursor: 'pointer' }}>Notifications</span>
-            <span className="px-3" style={{ cursor: 'pointer' }}>Help</span>
-          </div>
+  <span className="px-3" style={{ cursor: 'pointer' }}>Notifications</span>
+  <span 
+    className="px-3" 
+    style={{ cursor: 'pointer' }} 
+    onClick={() => navigate('/help')}>
+    Help
+  </span>
+</div>
         </MDBContainer>
       </MDBNavbar>
 
