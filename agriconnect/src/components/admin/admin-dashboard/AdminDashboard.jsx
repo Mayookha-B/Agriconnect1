@@ -43,7 +43,7 @@ const AdminDashboard = () => {
         </div>
         
         <div className="search-container">
-          <input type="text" placeholder="Search marketplace..." className="nav-search" />
+          <input type="text" placeholder="Search complaints" className="nav-search" />
           <button className="search-btn">
             <Search size={18} color="white" />
           </button>
