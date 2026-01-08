@@ -1,101 +1,146 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { 
   MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, 
-  MDBIcon, MDBNavbar, MDBBtn, MDBInput, MDBValidation 
+  MDBIcon, MDBNavbar, MDBBtn, MDBInput, MDBTextArea 
 } from 'mdb-react-ui-kit';
 
 function AddCrop() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [coords, setCoords] = useState({ lon: null, lat: null });
+  const agriGreen = "#37c90b"; 
+  const navBg = "#153b0f";     
+
   const [formValue, setFormValue] = useState({
     cropName: '',
-    price: '',
+    harvestDate: '',
+    expiryDate: '',
+    manualAddress: '',
     quantity: '',
-    category: 'Vegetables'
+    price: '',
+    category: 'Grains'
   });
 
-  // GEOLOCATION CAPTURE: Runs when the component loads
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setCoords({
-            lon: position.coords.longitude,
-            lat: position.coords.latitude
-          });
-          console.log("Farm location captured:", position.coords.latitude, position.coords.longitude);
-        },
-        (error) => {
-          console.error("Location error:", error);
-          alert("Please enable location services to list your crops.");
-        }
-      );
+  const [imageFile, setImageFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [coords, setCoords] = useState({ lat: null, lon: null });
+  const [isLocating, setIsLocating] = useState(false);
+
+  const onChange = (e) => {
+    setFormValue({ ...formValue, [e.target.name]: e.target.value });
+  };
+
+  // --- NEW: IMAGE UPLOAD HANDLER ---
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file); // Store file for backend/IPFS upload
+      setPreview(URL.createObjectURL(file)); // Create preview URL
     }
-  }, []);
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!coords.lat || !coords.lon) return alert("Waiting for location coordinates...");
-    
-    setLoading(true);
-    const finalData = {
-      ...formValue,
-      location: {
-        type: "Point",
-        coordinates: [coords.lon, coords.lat] // GeoJSON standard [Long, Lat]
-      }
-    };
-
-    console.log("Sending to Backend & Blockchain:", finalData);
-    // Add your axios.post or smart contract call here
-    setLoading(false);
+  // --- LOCATION LOGIC ---
+  const getCurrentGPS = () => {
+    setIsLocating(true);
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setCoords({ lat: latitude, lon: longitude });
+        try {
+          const res = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          setFormValue(prev => ({ ...prev, manualAddress: res.data.display_name }));
+        } catch (err) {
+          setFormValue(prev => ({ ...prev, manualAddress: `Lat: ${latitude}, Lon: ${longitude}` }));
+        }
+        setIsLocating(false);
+      });
+    }
   };
 
   return (
-    <div style={{ backgroundColor: '#f6f6f6', minHeight: '100vh' }}>
-      <MDBNavbar dark style={{ backgroundColor: '#153b0fff' }}>
-        <MDBContainer fluid>
-          <MDBBtn color="link" className="text-white" onClick={() => navigate('/farmer-dashboard')}>
-            <MDBIcon fas icon="arrow-left" /> Back
-          </MDBBtn>
+    <div style={{ backgroundColor: "#f0f2f5", minHeight: '100vh' }}>
+      <MDBNavbar dark style={{ backgroundColor: navBg }}>
+        <MDBContainer fluid className="px-4">
+           <div onClick={() => navigate(-1)} style={{ cursor: 'pointer' }}>
+             <MDBIcon fas icon="arrow-left" className="text-white me-3" />
+             <span className="text-white fw-bold">agriconnect | Add Listing</span>
+           </div>
         </MDBContainer>
       </MDBNavbar>
 
       <MDBContainer className="py-5">
-        <MDBCard className="shadow-sm border-0" style={{ borderRadius: '15px' }}>
-          <MDBCardBody className="p-4">
-            <h4 className="fw-bold mb-4">Add Crop with Geo-Tagging</h4>
-            
-            <div className="p-2 mb-3 bg-light rounded small border border-dashed text-center">
-              {coords.lat ? (
-                <span className="text-success fw-bold">
-                  <MDBIcon fas icon="check-circle" /> Farm Location Verified: {coords.lat.toFixed(4)}, {coords.lon.toFixed(4)}
-                </span>
-              ) : (
-                <span className="text-muted">Detecting farm location...</span>
-              )}
-            </div>
+        <MDBRow className="justify-content-center">
+          <MDBCol md="10">
+            <MDBCard className="shadow-sm border-0" style={{ borderRadius: '15px' }}>
+              <MDBCardBody className="p-5">
+                <h3 className="fw-bold mb-4">Add New Crop Listing</h3>
+                
+                <form>
+                  <MDBRow className="g-4">
+                    {/* Basic Details */}
+                    <MDBCol md="6">
+                      <MDBInput label="Crop Name" name='cropName' onChange={onChange} required />
+                    </MDBCol>
+                    <MDBCol md="6">
+                      <select className="form-select" name="category" onChange={onChange}>
+                        <option value="Grains">Grains</option>
+                        <option value="Vegetables">Vegetables</option>
+                        <option value="Fruits">Fruits</option>
+                      </select>
+                    </MDBCol>
 
-            <MDBValidation onSubmit={handleSubmit} className="row g-3">
-              <MDBCol md="6">
-                <MDBInput label="Crop Name" required onChange={(e) => setFormValue({...formValue, cropName: e.target.value})} />
-              </MDBCol>
-              <MDBCol md="6">
-                <MDBInput label="Price (ETH)" type="number" step="0.001" required onChange={(e) => setFormValue({...formValue, price: e.target.value})} />
-              </MDBCol>
-              <MDBCol md="6">
-                <MDBInput label="Quantity (kg)" type="number" required onChange={(e) => setFormValue({...formValue, quantity: e.target.value})} />
-              </MDBCol>
-              <MDBCol md="12">
-                <MDBBtn type="submit" disabled={loading || !coords.lat} className="w-100" style={{ backgroundColor: '#37c90bff' }}>
-                  {loading ? 'Processing...' : 'Submit Listing'}
-                </MDBBtn>
-              </MDBCol>
-            </MDBValidation>
-          </MDBCardBody>
-        </MDBCard>
+                    {/* Freshness Details */}
+                    <MDBCol md="6">
+                      <label className="small fw-bold text-muted mb-1">Harvest Date</label>
+                      <MDBInput type="date" name="harvestDate" onChange={onChange} required />
+                    </MDBCol>
+                    <MDBCol md="6">
+                      <label className="small fw-bold text-muted mb-1">Expiry Date</label>
+                      <MDBInput type="date" name="expiryDate" onChange={onChange} required min={formValue.harvestDate} />
+                    </MDBCol>
+
+                    {/* --- IMAGE UPLOAD PROVISION --- */}
+                    <MDBCol md="12">
+                      <label className="small fw-bold text-muted mb-2 d-block">Produce Image</label>
+                      <div className="text-center p-4 rounded-3 bg-light" style={{ border: '2px dashed #ced4da', minHeight: '200px' }}>
+                        <input type="file" id="cropImg" hidden onChange={handleImageChange} accept="image/*" />
+                        <label htmlFor="cropImg" style={{ cursor: 'pointer', width: '100%' }}>
+                          {preview ? (
+                            <img src={preview} alt="Preview" style={{ maxHeight: '250px', borderRadius: '8px' }} />
+                          ) : (
+                            <div className="py-4">
+                               <MDBIcon fas icon="cloud-upload-alt" size="3x" className="text-muted mb-2" />
+                               <p className="text-muted small mb-0">Click to upload produce photo</p>
+                            </div>
+                          )}
+                        </label>
+                      </div>
+                    </MDBCol>
+
+                    {/* Location */}
+                    <MDBCol md="12">
+                      <div className="d-flex justify-content-between mb-1">
+                        <label className="small fw-bold text-muted">Crop Location</label>
+                        <MDBBtn size="sm" color="success" outline onClick={getCurrentGPS}>
+                          <MDBIcon fas icon="crosshairs" /> {isLocating ? "Locating..." : "Use Current GPS"}
+                        </MDBBtn>
+                      </div>
+                      <MDBTextArea name='manualAddress' value={formValue.manualAddress} onChange={onChange} rows={3} />
+                    </MDBCol>
+
+                    {/* Submit Section */}
+                    <MDBCol md="12" className="d-flex justify-content-end align-items-center mt-5 border-top pt-4">
+                      <MDBBtn color='link' className='text-muted fw-bold me-4 shadow-0' onClick={() => navigate(-1)}>CANCEL</MDBBtn>
+                      <MDBBtn className='px-5 fw-bold shadow-0' style={{ backgroundColor: agriGreen, borderRadius: '8px' }}>
+                        SUBMIT LISTING
+                      </MDBBtn>
+                    </MDBCol>
+                  </MDBRow>
+                </form>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
       </MDBContainer>
     </div>
   );

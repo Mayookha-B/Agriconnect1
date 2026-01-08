@@ -2,26 +2,22 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 
-// GET /api/products/near?lng=...&lat=...&dist=50000
+// Search products near a user
 router.get('/near', async (req, res) => {
-  const { lng, lat, dist } = req.query; // dist in meters, e.g., 50000 for 50km
+  const { lng, lat, maxDist = 50000 } = req.query; // maxDist in meters
 
   try {
-    const nearbyProducts = await Product.find({
+    const nearby = await Product.find({
       location: {
         $near: {
-          $geometry: {
-            type: "Point",
-            coordinates: [parseFloat(lng), parseFloat(lat)]
-          },
-          $maxDistance: parseInt(dist) || 50000 
+          $geometry: { type: "Point", coordinates: [parseFloat(lng), parseFloat(lat)] },
+          $maxDistance: parseInt(maxDist)
         }
       }
     });
-
-    res.json(nearbyProducts);
+    res.json(nearby);
   } catch (err) {
-    res.status(500).json({ error: "Search failed", details: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
