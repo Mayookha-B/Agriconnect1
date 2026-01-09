@@ -9,7 +9,7 @@ import ConsumerRegister from "./components/consumer/consumer-register/consumerre
 import FarmerDashboard from "./components/farmer/farmer-dashboard/farmerdashboard";
 import ConsumerPage from './components/consumer/consumer-page/ConsumerPage';
 import ShopPage from './components/consumer/shop-now/shopnow';
-import AdminDashboard from './components/admin/admin-dashboard/AdminDashboard';
+import AdminDashboard from './components/Admin/admin-dashboard/AdminDashboard';
 import AddCrop from './components/farmer/add-crop/AddCrop';
 import Inventory from './components/farmer/inventory/Inventory';
 import Orders from './components/farmer/orders/Orders';
