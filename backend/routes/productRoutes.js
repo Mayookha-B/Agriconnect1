@@ -2,42 +2,21 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 const auth = require('../middleware/auth');
-const multer= require('multer') // Simple setup for testing
+const multer = require('multer');
 
-
+// Multer Storage Setup
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Ensure this folder exists in your root directory
-  },
-  filename: function (req, file, cb) {
-    // Generates: 1736345000000-apple.jpg
-    cb(null, Date.now() + '-' + file.originalname);
-  }
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
-
 const upload = multer({ storage: storage });
 
-// @route   POST /api/products/add
-// @desc    Add a new crop listing with 2dsphere location
-router.post('/add', auth, upload.single('image'),async (req, res) => {
+// @route    POST /api/products/add
+router.post('/add', auth, upload.single('image'), async (req, res) => {
   try {
-    const { 
-      cropName, 
-      category, 
-      harvestDate, 
-      expiryDate, 
-      quantity, 
-      price, 
-      manualAddress, 
-      lat, 
-      lon, 
-      image 
-    } = req.body;
+    const { cropName, category, harvestDate, expiryDate, quantity, price, manualAddress, lat, lon } = req.body;
 
-    // Validate coordinates
-    if (!lat || !lon) {
-      return res.status(400).json({ success: false, message: "Location coordinates are required." });
-    }
+    if (!lat || !lon) return res.status(400).json({ success: false, message: "Coordinates required" });
 
     const newProduct = new Product({
       farmerId: req.user.id,
@@ -48,51 +27,39 @@ router.post('/add', auth, upload.single('image'),async (req, res) => {
       quantity,
       price,
       manualAddress,
-      image : req.file ? req.file.path : 'uploads/placeholder.jpg',
-      // Mapping the flat lat/lon from frontend to GeoJSON [Lon, Lat]
+      image: req.file ? req.file.path : 'uploads/placeholder.jpg',
       location: {
         type: 'Point',
-        coordinates: [parseFloat(lon), parseFloat(lat)] // MUST BE [LONGITUDE, LATITUDE]
+        coordinates: [parseFloat(lon), parseFloat(lat)]
       }
     });
 
-    const savedProduct = await newProduct.save();
-
-    res.status(201).json({
-      success: true,
-      message: "Crop listing created successfully!",
-      product: savedProduct
-    });
-
+    await newProduct.save();
+    res.status(201).json({ success: true, message: "Crop listing created!" });
   } catch (error) {
-    console.error("Product Add Error:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Server Error", 
-      details: error.message 
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// @route   GET /api/products/nearby
-// @desc    Find crops within a certain radius (Crucial for DeFi Marketplace)
-router.get('/nearby', async (req, res) => {
-  const { lat, lon, distance = 10 } = req.query; // distance in km
-
+// @route    GET /api/products/my-inventory
+// @desc     Fetch only the products belonging to the logged-in farmer
+router.get('/my-inventory', auth, async (req, res) => {
   try {
-    const products = await Product.find({
-      location: {
-        $near: {
-          $geometry: { type: "Point", coordinates: [parseFloat(lon), parseFloat(lat)] },
-          $maxDistance: distance * 1000 // Convert km to meters
-        }
-      }
-    });
+    const products = await Product.find({ farmerId: req.user.id }).sort({ createdAt: -1 });
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: "Error searching nearby products" });
+    res.status(500).json({ message: "Error fetching inventory" });
   }
 });
 
+// @route    DELETE /api/products/:id
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: "Product deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Delete failed" });
+  }
+});
 
 module.exports = router;

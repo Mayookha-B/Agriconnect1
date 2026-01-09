@@ -6,69 +6,31 @@ const ProductSchema = new mongoose.Schema({
     ref: 'Farmer',
     required: true
   },
-  cropName: {
-    type: String,
-    required: true,
-    trim: true
-  },
+  cropName: { type: String, required: true, trim: true },
   category: {
     type: String,
     enum: ['Grains', 'Vegetables', 'Fruits'],
     default: 'Grains'
   },
-  harvestDate: {
-    type: Date,
-    required: true
-  },
-  expiryDate: {
-    type: Date,
-    required: true
-  },
-  quantity: {
-    type: Number,
-    required: true,
-    min: 0
-  },
-  price: {
-    type: Number,
-    required: true,
-    min: 0
-  },
-  manualAddress: {
-    type: String,
-    required: true
-  },
-  
-  // --- UPDATED GEOLOCATION FOR 2DSPHERE ---
+  harvestDate: { type: Date, required: true },
+  expiryDate: { type: Date, required: true },
+  quantity: { type: Number, required: true, min: 0 }, // Initial Total Quantity
+  soldQuantity: { type: Number, default: 0, min: 0 }, // NEW: Tracks sales
+  price: { type: Number, required: true, min: 0 },
+  manualAddress: { type: String, required: true },
   location: {
-    type: {
-      type: String,
-      enum: ['Point'], // Must be 'Point'
-      required: true,
-      default: 'Point'
-    },
-    coordinates: {
-      type: [Number], // [longitude, latitude]
-      required: true
-    }
+    type: { type: String, enum: ['Point'], required: true, default: 'Point' },
+    coordinates: { type: [Number], required: true } // [longitude, latitude]
   },
-  
-  image: {
-    type: String,
-    default: 'placeholder.jpg'
-  },
+  image: { type: String, default: 'uploads/placeholder.jpg' },
   status: {
     type: String,
     enum: ['Available', 'Sold Out', 'In Transit'],
     default: 'Available'
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  createdAt: { type: Date, default: Date.now }
 });
 
-// --- CRITICAL: ADDING THE 2DSPHERE INDEX ---
 ProductSchema.index({ location: "2dsphere" });
 
 module.exports = mongoose.model('Product', ProductSchema);
