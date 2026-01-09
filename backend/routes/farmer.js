@@ -16,7 +16,8 @@ router.post('/register', async (req, res) => {
     const savedFarmer = await newFarmer.save();
     res.status(201).json({
       message: "Farmer registered successfully !",
-      
+      // Send the custom ID back to the frontend
+      farmerCustomId: savedFarmer.farmerCustomId,
       farmerId: savedFarmer._id
     });
   } catch (error) {

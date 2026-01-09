@@ -92,9 +92,6 @@ function Adminlog() {
                     LOGIN
                   </MDBBtn>
                   
-                  <p className="small fw-bold mt-2 pt-1 mb-2">
-                    Don't have an account? <a href="/consumerregister" className="link-danger">Register</a>
-                  </p>
                 </div>
               </form>
             </div>

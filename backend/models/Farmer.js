@@ -2,6 +2,14 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const FarmerSchema = new mongoose.Schema({
+
+  // --- NEW FIELD: CUSTOM FARMER ID ---
+  farmerCustomId: { 
+    type: String, 
+    unique: true, 
+    sparse: true // Allows the field to be null until generated
+  },
+
   fullName: {
     type: String,
     required: true,
@@ -51,6 +59,26 @@ const FarmerSchema = new mongoose.Schema({
 
 // --- AUTOMATIC HASHING LOGIC ---
 FarmerSchema.pre('save', async function () {
+
+  const farmer = this;
+
+  // 1. GENERATE CUSTOM ID (Only if it's a new document)
+  if (farmer.isNew) {
+    let isUnique = false;
+    while (!isUnique) {
+      const randomDigits = Math.floor(100000 + Math.random() * 900000); // 6 digits
+      const generatedId = `F-${randomDigits}`;
+
+      // Check for collisions
+      const existing = await mongoose.models.Farmer.findOne({ farmerCustomId: generatedId });
+      if (!existing) {
+        farmer.farmerCustomId = generatedId;
+        isUnique = true;
+      }
+    }
+  }
+
+
   // Only hash the password if it has been modified (or is new)
   if (!this.isModified('password')) return;
 
