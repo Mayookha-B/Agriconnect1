@@ -6,10 +6,11 @@ import "./ConsumerPage.css";
 const ConsumerPage = () => {
   const navigate = useNavigate();
   
-  // --- STATES FOR PRECISE LOCATION ---
+  // --- STATES ---
   const [locationName, setLocationName] = useState("Locating...");
   const [coords, setCoords] = useState({ lat: null, lon: null });
   const [showLocationMenu, setShowLocationMenu] = useState(false);
+  const [showAccountMenu, setShowAccountMenu] = useState(false); // Account Dropdown State
   const [manualInput, setManualInput] = useState("");
 
   useEffect(() => {
@@ -23,6 +24,12 @@ const ConsumerPage = () => {
     // 2. Initial High-Accuracy Fetch
     autoFetchExactLocation();
   }, [navigate]);
+
+  // --- FEATURE: LOGOUT ---
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/consumer-login');
+  };
 
   // --- FEATURE: HIGH-ACCURACY GPS FETCH ---
   const autoFetchExactLocation = () => {
@@ -47,7 +54,7 @@ const ConsumerPage = () => {
     }
   };
 
-  // --- FEATURE: REVERSE GEOCODING FOR EXACT NAME ---
+  // --- FEATURE: REVERSE GEOCODING ---
   const updateExactLocation = async (lat, lon, customName = null) => {
     setCoords({ lat, lon });
     let displayName = customName;
@@ -56,7 +63,6 @@ const ConsumerPage = () => {
       try {
         const res = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
         const addr = res.data.address;
-        // Priority logic for the exact name
         displayName = addr.neighbourhood || addr.suburb || addr.road || addr.village || addr.city || "Exact Location";
       } catch (err) {
         displayName = "Custom Location";
@@ -143,17 +149,32 @@ const ConsumerPage = () => {
           <ul className="nav-links">
             <li>Home</li>
             <li><Link to="/shop">Shop</Link></li>
-           
-    <div className="cart-icon-wrapper">
-      
-      <i className="fas fa-shopping-cart"></i>
-    <span className="nav-line-2">Cart</span>
-    </div>
+            
+            <div className="cart-icon-wrapper">
+              <i className="fas fa-shopping-cart"></i>
+              <span className="nav-line-2">Cart</span>
+            </div>
           </ul>
 
-          <div className="nav-item-account">
+          {/* DROPDOWN ACCOUNT SECTION */}
+          <div 
+            className="nav-item-account"
+            onMouseEnter={() => setShowAccountMenu(true)}
+            onMouseLeave={() => setShowAccountMenu(false)}
+          >
             <span className="nav-line-1">Hello, Sign in</span>
             <span className="nav-line-2">Account & Lists <i className="fas fa-caret-down"></i></span>
+            
+            {showAccountMenu && (
+              <div className="account-dropdown-panel">
+                <ul className="account-menu-list">
+                  <li><Link to="/profile">My Profile</Link></li>
+                  <li><Link to="/my-orders">My Orders</Link></li>
+                  <hr className="dropdown-divider" />
+                  <li className="sign-out-item" onClick={handleLogout}>Sign Out</li>
+                </ul>
+              </div>
+            )}
           </div>
 
           <div className="nav-item"><i className="fas fa-bell"></i></div>
@@ -183,49 +204,32 @@ const ConsumerPage = () => {
         <div><h3>24×7 Support</h3><p>We are here for you</p></div>
       </section>
 
-       
       {/* CATEGORIES */}
       <section className="category-section">
         <h2>Our Categories</h2>
-
         <div className="categories">
-
           <div>
-            <img src="https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=1200" />
+            <img src="https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Fruits" />
             <p>Fresh Fruits</p>
           </div>
-
           <div>
-            <img src="https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg?auto=compress&cs=tinysrgb&w=1200" />
+            <img src="https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Vegetables" />
             <p>Organic Vegetables</p>
           </div>
-
         </div>
       </section>
 
-      <section
-  className="cta-section"
-  style={{
-    backgroundImage:
-      "url('https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38')",
-  }}
->
-  <div className="cta-overlay">
-    <h2>Ready to Find Your Perfect Produce?</h2>
+      <section className="cta-section" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38')" }}>
+        <div className="cta-overlay">
+          <h2>Ready to Find Your Perfect Produce?</h2>
+          <p>Browse fresh fruits and vegetables from trusted farmers, delivered directly to your doorstep.</p>
+          <Link to="/shop">
+            <button className="shop-btn">Shop Now</button>
+          </Link>
+        </div>
+      </section>
 
-    <p>
-      Browse fresh fruits and vegetables from trusted farmers,
-      delivered directly to your doorstep.
-    </p>
-
-    <Link to="/shop">
-  <button className="shop-btn">Shop Now</button>
-</Link>
-
-  </div>
-</section>
       {/* FOOTER */}
-
       <footer className="footer">
         <p>© 2026 AgriConnect - Connecting Farmers and Consumers</p>
       </footer>

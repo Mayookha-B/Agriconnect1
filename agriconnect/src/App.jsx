@@ -16,7 +16,7 @@ import Orders from './components/farmer/orders/Orders';
 import Growth from './components/farmer/growth/Growth';
 import ViewVideo from './components/farmer/university/ViewVideo';
 import HelpPage from "./components/farmer/help/HelpPage";
-
+import MyOrders from "./components/consumer/orders/MyOrders";
 
 const App = () => {
   return (
@@ -39,6 +39,7 @@ const App = () => {
         <Route path="/growth" element={<Growth />} />
         <Route path="/view-video" element={<ViewVideo />} />
         <Route path="/help" element={<HelpPage />} />
+        <Route path="/my-orders" element={<MyOrders />} />
       
         
       </Routes>
