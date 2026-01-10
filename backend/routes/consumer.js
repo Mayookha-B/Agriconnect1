@@ -74,11 +74,11 @@ router.post('/login', async (req, res) => {
     }
 
     // 3. Create JWT Payload (Role is set to 'consumer')
+    // --- PAYLOAD WITH CUSTOM ID ---
     const payload = {
-      user: {
-        id: consumer.id,
-        role: 'consumer'
-      }
+      id: consumer.id,
+      consumerCustomId: consumer.consumerCustomId, // The C-XXXXXX ID
+      role: 'consumer'
     };
 
     // 4. Sign Token

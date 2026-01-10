@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MDBContainer, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBTextArea, MDBIcon } from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -6,25 +6,42 @@ import axios from 'axios';
 function HelpPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ farmerId: '', dispute: '' });
-  const [status, setStatus] = useState(''); // State to hold the message
+  const [status, setStatus] = useState('');
 
   const agrilight = "#37c90bff";
   const agriDark = "#153b0fff";
 
+  // --- NEW: AUTO-FETCH FARMER ID FROM TOKEN ---
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const payload = JSON.parse(window.atob(base64Url));
+        // Use the custom ID (F-XXXXXX) we added to the payload earlier
+        setFormData(prev => ({ ...prev, farmerId: payload.farmerCustomId || '' }));
+      } catch (err) {
+        console.error("Token decode error", err);
+      }
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus('Submitting...'); // Optional: show loading state
+    setStatus('Submitting...');
     
     try {
+      // Points to your new Dispute Route
       const response = await axios.post('http://localhost:5000/api/disputes', formData);
       
       if (response.data.success) {
-        setStatus('Dispute submitted successfully!'); // This triggers the green text
-        setFormData({ farmerId: '', dispute: '' }); // Clear the form
+        setStatus(`Dispute ${response.data.complaintId} submitted successfully!`);
+        // We keep the farmerId but clear the dispute text
+        setFormData(prev => ({ ...prev, dispute: '' })); 
       }
     } catch (err) {
       console.error(err);
-      setStatus('Error submitting dispute. Please try again.'); // This triggers red text
+      setStatus('Error submitting dispute. Please try again.');
     }
   };
 
@@ -40,18 +57,18 @@ function HelpPage() {
             <div className="text-center mb-4">
               <MDBIcon fas icon="hands-helping" size="3x" style={{ color: agrilight }} />
               <h3 className="fw-bold mt-2" style={{ color: agriDark }}>Help & Dispute Center</h3>
-              <p className="text-muted small">Please provide your details and explain the issue.</p>
+              <p className="text-muted small">Your ID is automatically detected for security.</p>
             </div>
 
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="form-label small fw-bold">Farmer ID / Username</label>
+                <label className="form-label small fw-bold">Farmer ID (Fixed)</label>
                 <MDBInput 
-                  placeholder="e.g. FARMER-123" 
                   type="text" 
                   value={formData.farmerId}
-                  onChange={(e) => setFormData({...formData, farmerId: e.target.value})}
-                  required 
+                  readOnly // Prevents user from changing their ID
+                  className="bg-light"
+                  style={{ cursor: 'not-allowed' }}
                 />
               </div>
 
@@ -70,11 +87,10 @@ function HelpPage() {
                 Submit Dispute
               </MDBBtn>
 
-              {/* SUCCESS/ERROR MESSAGE DISPLAY */}
               {status && (
                 <div 
                   className={`text-center mt-3 p-2 rounded small ${
-                    status.includes('Error') ? 'text-danger bg-danger-light' : 'text-success bg-success-light'
+                    status.includes('Error') ? 'text-danger' : 'text-success'
                   }`}
                   style={{ backgroundColor: status.includes('Error') ? '#f8d7da' : '#d4edda' }}
                 >

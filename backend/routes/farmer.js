@@ -50,6 +50,7 @@ router.post('/login', async (req, res) => {
     // 3. Create JWT Payload
     const payload = {
       id: farmer.id,
+      farmerCustomId: farmer.farmerCustomId, // Your new F-123456 ID
       metamaskId: farmer.metamaskId,
       role: 'farmer' // Adding role is very helpful for DeFi apps
     };

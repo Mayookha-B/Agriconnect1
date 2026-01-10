@@ -26,6 +26,8 @@ const Consumer = require('./models/Consumer'); // Import the new model
 const farmerRoutes = require('./routes/farmer');
 const consumerRoutes = require('./routes/consumer');
 const productRoutes = require('./routes/productRoutes');
+const disputeRoutes = require('./routes/disputeRoutes');
+
 
 app.use('/api/farmer', farmerRoutes);
 app.use('/api/consumer', consumerRoutes);
@@ -34,6 +36,8 @@ app.use('/api/products', productRoutes);
 
 // Make uploads folder static so React can display images
 app.use('/uploads', express.static('uploads'));
+
+app.use('/api/disputes', disputeRoutes);
 // 3. Registration Route
 app.post('/api/farmer/register', async (req, res) => {
   try {
