@@ -63,25 +63,35 @@ router.delete('/:id', auth, async (req, res) => {
 });
 
 
-// GET /api/products/near?lng=...&lat=...&dist=...
-router.get('/near', async (req, res) => {
-  const { lng, lat, dist = 50 } = req.query; // dist in km
-
+// @route    GET /api/products/all
+// @desc     Fetch all products from all farmers globally
+router.get('/all', async (req, res) => {
   try {
-    const products = await Product.find({
-      location: {
-        $near: {
-          $geometry: { 
-            type: "Point", 
-            coordinates: [parseFloat(lng), parseFloat(lat)] 
-          },
-          $maxDistance: dist * 1000 // Convert km to meters
-        }
-      }
-    });
+    // We find all products where quantity is greater than 0
+    // We use .populate to get the Farmer's name from the User model
+    const products = await Product.find({ 
+      $or: [
+        { unsoldQuantity: { $gt: 0 } },
+        { quantity: { $gt: 0 } }
+      ]
+    })
+    .populate('farmerId', 'name')
+    .sort({ createdAt: -1 }); // Show newest products first
+
     res.json(products);
   } catch (err) {
-    res.status(500).json({ error: "Search failed", details: err.message });
+    res.status(500).json({ message: "Error fetching marketplace", error: err.message });
+  }
+});
+
+
+router.get('/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id).populate('farmerId', 'name');
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: "Server error fetching product details" });
   }
 });
 

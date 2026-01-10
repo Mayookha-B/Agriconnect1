@@ -1,77 +1,39 @@
+/* BANNER */
 .shop-hero {
-  height: 55vh;
+  height: 300px;
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                    url("https://images.pexels.com/photos/551997/pexels-photo-551997.jpeg?auto=compress&cs=tinysrgb&w=1600");
   background-size: cover;
   background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; align-items: center; justify-content: center;
 }
+.shop-hero h1 { color: white; font-size: 60px; font-weight: 800; }
 
-.shop-title {
-  font-size: 70px;
-  color: white;
-  font-weight: 700;
-}
-
-.shop-topbar {
-  margin: 30px 60px;
-  display: flex;
-  justify-content: space-between;
-}
-
+/* GRID */
+.shop-container { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 35px;
-  padding: 0 60px 40px 60px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
 }
 
+/* PEACH PRODUCT CARD */
 .product-card {
-  text-align: left;
+  background: white; border-radius: 20px; border: 1px solid #eee;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden;
+  display: flex; flex-direction: column; transition: 0.3s;
 }
+.product-card:hover { transform: translateY(-5px); }
+.product-image img { width: 100%; height: 200px; object-fit: cover; }
 
-.product-card img {
-  width: 100%;
-  border-radius: 6px;
+.product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+.product-name { font-size: 22px; margin: 0; color: #333; }
+.farmer-label { font-size: 14px; color: #888; margin: 5px 0; }
+.product-price { font-size: 20px; color: #1a4314; margin: 10px 0; }
+
+.view-details-btn {
+  background-color: #ffc272; /* Peach color */
+  color: #1a1a1a; text-align: center; padding: 12px;
+  border-radius: 10px; font-weight: bold; text-decoration: none;
+  margin-top: auto; /* Keeps buttons aligned */
 }
-
-.product-card h3 {
-  margin-top: 12px;
-  font-weight: 600;
-}
-
-.product-card span {
-  font-weight: bold;
-}
-
-.cta-banner {
-  margin-top: 40px;
-  height: 55vh;
-  background-size: cover;
-  background-position: center;
-  text-align: center;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.cta-banner button {
-  background: #7ac142;
-  padding: 12px 30px;
-  border-radius: 30px;
-  border: none;
-  font-size: 18px;
-}
-
-footer {
-  text-align: center;
-  padding: 30px 0;
-  background: #eefcd9;
-}
-
-footer p {
-  font-weight: 600;
-}
-
-

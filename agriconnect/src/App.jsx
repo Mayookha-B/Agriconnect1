@@ -17,6 +17,7 @@ import Growth from './components/farmer/growth/Growth';
 import ViewVideo from './components/farmer/university/ViewVideo';
 import HelpPage from "./components/farmer/help/HelpPage";
 import MyOrders from "./components/consumer/orders/MyOrders";
+import ProductDetails from './components/consumer/shop-now/ProductDetails';
 
 const App = () => {
   return (
@@ -40,7 +41,7 @@ const App = () => {
         <Route path="/view-video" element={<ViewVideo />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/my-orders" element={<MyOrders />} />
-      
+        <Route path="/product/:id" element={<ProductDetails />} />
         
       </Routes>
     </Router>
