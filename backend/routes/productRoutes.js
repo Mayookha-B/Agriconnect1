@@ -62,4 +62,27 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
+
+// GET /api/products/near?lng=...&lat=...&dist=...
+router.get('/near', async (req, res) => {
+  const { lng, lat, dist = 50 } = req.query; // dist in km
+
+  try {
+    const products = await Product.find({
+      location: {
+        $near: {
+          $geometry: { 
+            type: "Point", 
+            coordinates: [parseFloat(lng), parseFloat(lat)] 
+          },
+          $maxDistance: dist * 1000 // Convert km to meters
+        }
+      }
+    });
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ error: "Search failed", details: err.message });
+  }
+});
+
 module.exports = router;

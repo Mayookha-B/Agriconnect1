@@ -1,40 +1,154 @@
-/* Whole page */
-.landing-container {
-  font-family: 'Inter', sans-serif;
-  color: #1b1b1b;
-}
-
-/* Navbar */
-.navbar {
+.navbar-top {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 18px 60px;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: rgb(255, 255, 255);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  z-index: 10;
+  justify-content: space-between;
+  background-color: #131921; /* Amazon Dark Theme */
+  color: white;
+  padding: 0 20px;
+  height: 60px;
+  gap: 10px;
 }
 
-.logo {
-  font-size: 28px;
-  font-weight: 800;
-  color: #2f7a2f;
+/* --- LEFT SECTION --- */
+.nav-left-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: fit-content;
+}
+
+.nav-logo-section {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.navbar-logo-img {
+  height: 35px;
+  width: auto;
+  object-fit: contain;
+  margin-right: 8px;
+}
+
+.logo-text-branding {
+  font-size: 1.6rem;
+  font-weight: bold;
+  letter-spacing: -1px;
+}
+
+/* Amazon Location Box */
+.location-box-amazon {
+  display: flex;
+  align-items: center;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: 0.2s;
+  position: relative;
+}
+
+.location-box-amazon:hover {
+  border: 1px solid white;
+  border-radius: 2px;
+}
+
+.location-box-amazon i { margin-top: 12px; margin-right: 5px; font-size: 16px; }
+.loc-text-details { display: flex; flex-direction: column; }
+.nav-line-1 { font-size: 12px; color: #ccc; }
+.nav-line-2 { font-size: 14px; font-weight: bold; }
+
+/* --- CENTER SEARCH --- */
+.nav-search-fill {
+  flex-grow: 1;
+  max-width: 800px;
+}
+
+.search-container-inner {
+  display: flex;
+  height: 40px;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.search-cat-dropdown {
+  background: #f3f3f3;
+  border: none;
+  border-right: 1px solid #ddd;
+  padding: 0 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.search-container-inner input {
+  flex-grow: 1;
+  border: none;
+  padding: 0 15px;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+}
+
+.search-btn {
+  background: #febd69; /* Amazon Orange */
+  border: none;
+  width: 45px;
+  cursor: pointer;
+  color: #333;
+}
+
+.search-btn:hover { background: #f3a847; }
+
+/* --- RIGHT SECTION --- */
+.nav-right-utility {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: fit-content;
 }
 
 .nav-links {
   display: flex;
-  gap: 35px;
-  font-size: 18px;
   list-style: none;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
 }
 
-.nav-links li {
+.nav-links a, .nav-links li {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.nav-item-account {
+  display: flex;
+  flex-direction: column;
   cursor: pointer;
 }
 
+.nav-item i { font-size: 18px; cursor: pointer; }
+
+/* Dropdown UI */
+.location-dropdown-panel {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background: white;
+  color: #333;
+  width: 260px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  z-index: 1100;
+}
+
+.panel-title { font-weight: bold; font-size: 14px; margin-bottom: 10px; }
+.manual-box { display: flex; gap: 5px; margin-bottom: 12px; }
+.manual-box input { flex: 1; padding: 6px; border: 1px solid #ddd; border-radius: 4px; }
+.manual-box button { background: #37c90b; color: white; border: none; padding: 0 10px; border-radius: 4px; }
+.gps-btn-precise { width: 100%; padding: 8px; background: transparent; border: 1px solid #37c90b; color: #37c90b; font-weight: bold; border-radius: 4px; }
 
 /* HERO SECTION */
 .hero {
