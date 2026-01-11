@@ -45,6 +45,7 @@ const App = () => {
           <Route path="/view-video" element={<ViewVideo />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/consumer-page" element={<ConsumerPage />} />
+          <Route path="/orders" element={<Orders />} />
 
           {/* PAGES WITH TOPBAR (Consumer Routes) */}
           <Route path="/shop" element={<><Navbar /><ShopPage /></>} />
