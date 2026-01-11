@@ -185,7 +185,11 @@ const ConsumerPage = () => {
           </div>
 
           <div className="nav-item"><i className="fas fa-bell"></i></div>
-          <div className="nav-item"><i className="fas fa-question-circle"></i></div>
+          <div className="nav-item">
+            <Link to="/consumer-help" style={{ color: 'inherit' }}>
+                <i className="fas fa-question-circle"></i>
+            </Link>
+          </div>
         </div>
       </nav>
 

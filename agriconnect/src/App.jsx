@@ -23,6 +23,8 @@ import ProductDetails from './components/consumer/shop-now/ProductDetails';
 import Checkout from "./components/consumer/checkout/Checkout";
 import CartPage from "./components/consumer/cart/CartPage";
 import Navbar from "./components/common/Navbar";
+import ConsumerHelpPage from './components/consumer/consumer-help/ConsumerHelpPage';
+
 const App = () => {
   return (
     <CartProvider>
@@ -53,6 +55,7 @@ const App = () => {
           <Route path="/product/:id" element={<><Navbar /><ProductDetails /></>} />
           <Route path="/checkout" element={<><Navbar /><Checkout /></>} />
           <Route path="/my-orders" element={<><Navbar /><MyOrders /></>} />
+          <Route path="/consumer-help" element={<><Navbar /><ConsumerHelpPage /></>} />
           
           {/* FARMER DASHBOARD (Uses its own Sidebar) */}
           <Route path="/farmer-dashboard" element={<FarmerDashboard />} />

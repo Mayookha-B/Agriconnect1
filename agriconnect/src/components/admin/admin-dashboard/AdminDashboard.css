@@ -125,5 +125,95 @@
   font-size: 14px;
 }
 
+.dashboard-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-tabs {
+  display: flex;
+  background: #f0f0f0;
+  padding: 5px;
+  border-radius: 8px;
+  gap: 5px;
+}
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #666;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.tab-item.active {
+  background: white;
+  color: #153b0f; /* Your dark agri green */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.empty-msg {
+  text-align: center;
+  padding: 50px;
+  color: #888;
+  font-style: italic;
+}
+
+.user-id {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.status-filter-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.filter-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+}
+
+.status-main-select {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #153b0f;
+  cursor: pointer;
+  background: transparent;
+}
+
+/* Enhancing the table row appearance when no data is found */
+.empty-msg {
+  text-align: center;
+  padding: 50px;
+  color: #888;
+  font-style: italic;
+  background-color: #fcfcfc;
+}
+
 .status-wrapper.pending { color: #f5a623; }
 .status-wrapper.resolved { color: #4caf50; }
