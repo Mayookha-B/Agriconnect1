@@ -2,19 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./ProductDetails.css";
+import { useCart } from "../../../context/CartContext"; // Hook is already imported
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
+  
+  // --- ACTIVATE CART HOOK ---
+  const { addToCart } = useCart(); 
 
   useEffect(() => {
     const fetchDetails = async () => {
       try {
         const res = await axios.get(`http://localhost:5000/api/products/${id}`);
         setProduct(res.data);
-      } catch (err) { console.error(err); }
+      } catch (err) {
+        console.error("Error fetching product details:", err);
+      }
     };
     fetchDetails();
   }, [id]);
@@ -23,12 +29,24 @@ const ProductDetails = () => {
 
   const totalAmount = (product.price * qty).toFixed(4);
 
+  // --- ADD TO CART HANDLER ---
+  const handleAddToCart = () => {
+    // We pass the full product object and the current state qty
+    addToCart(product, qty);
+    
+    // Optional: Provide feedback to user
+    alert(`${product.cropName} added to cart!`);
+  };
+
   return (
     <div className="product-details-page">
       <div className="details-card">
         {/* IMAGE SECTION */}
         <div className="details-image">
-          <img src={`http://localhost:5000/${product.image.replace(/\\/g, "/")}`} alt={product.cropName} />
+          <img 
+            src={`http://localhost:5000/${product.image.replace(/\\/g, "/")}`} 
+            alt={product.cropName} 
+          />
         </div>
 
         {/* INFO SECTION */}
@@ -80,8 +98,15 @@ const ProductDetails = () => {
           </div>
 
           <div className="detail-actions">
-            <button className="cart-btn">Add to Cart</button>
-            <button className="buy-btn" onClick={() => navigate('/checkout', { state: { product, qty, totalAmount } })}>
+            {/* LINKED TO HANDLER */}
+            <button className="cart-btn" onClick={handleAddToCart}>
+              Add to Cart
+            </button>
+            
+            <button 
+              className="buy-btn" 
+              onClick={() => navigate('/checkout', { state: { product, qty, totalAmount } })}
+            >
               Buy Now
             </button>
           </div>

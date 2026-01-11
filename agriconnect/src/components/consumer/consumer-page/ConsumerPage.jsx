@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import "./ConsumerPage.css";
+import { useCart } from "../../../context/CartContext";
 
 const ConsumerPage = () => {
   const navigate = useNavigate();
@@ -88,6 +89,9 @@ const ConsumerPage = () => {
     }
   };
 
+  const { cart } = useCart();
+  const cartItemCount = cart.reduce((acc, item) => acc + item.qty, 0);
+
   return (
     <div className="landing-container">
       {/* --- AMAZON-STYLE TOPBAR --- */}
@@ -150,10 +154,13 @@ const ConsumerPage = () => {
             <li>Home</li>
             <li><Link to="/shop">Shop</Link></li>
             
-            <div className="cart-icon-wrapper">
-              <i className="fas fa-shopping-cart"></i>
-              <span className="nav-line-2">Cart</span>
-            </div>
+            <Link to="/cart" className="cart-icon-wrapper">
+      <div className="cart-badge-container">
+        <span className="cart-count">{cartItemCount}</span>
+        <i className="fas fa-shopping-cart"></i>
+      </div>
+      <span className="nav-line-2">Cart</span>
+    </Link>
           </ul>
 
           {/* DROPDOWN ACCOUNT SECTION */}
