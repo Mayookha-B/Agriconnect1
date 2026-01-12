@@ -95,4 +95,35 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// @route    GET /api/products/filter/nearby
+// @desc     Fetch products within a specific radius
+router.get('/filter/nearby', async (req, res) => {
+  const { lat, lon, radius } = req.query;
+
+  try {
+    // If no coordinates are provided, just return all products
+    if (!lat || !lon) {
+      const allProducts = await Product.find({ quantity: { $gt: 0 } }).sort({ createdAt: -1 });
+      return res.json(allProducts);
+    }
+
+    const products = await Product.find({
+      quantity: { $gt: 0 },
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [parseFloat(lon), parseFloat(lat)] // [Longitude, Latitude]
+          },
+          $maxDistance: parseInt(radius) * 1000 // Convert km to meters
+        }
+      }
+    }).populate('farmerId', 'fullName farmerCustomId');
+
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: "Location search failed", error: err.message });
+  }
+});
+
 module.exports = router;

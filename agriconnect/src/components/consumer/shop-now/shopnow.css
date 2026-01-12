@@ -37,3 +37,50 @@
   border-radius: 10px; font-weight: bold; text-decoration: none;
   margin-top: auto; /* Keeps buttons aligned */
 }
+
+.filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #f8f9fa;
+  padding: 15px 25px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  border: 1px solid #eee;
+}
+
+.filter-item select {
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-left: 10px;
+}
+
+.custom-radius-input {
+  display: flex;
+  gap: 10px;
+}
+
+.custom-radius-input input {
+  width: 100px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.custom-radius-input button {
+  background: #37c90b;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.no-products {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+  color: #666;
+}
